@@ -1,0 +1,14 @@
+<table>
+    <thead>
+        <tr>
+            <th>영화 제목</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="movie : ${movieList}">
+            <td>
+            	<a th:href="@{|movie/detail/{movie.id}|}" th:text="${movie.title}"></a>
+            </td>
+        </tr>
+    </tbody>
+</table>
