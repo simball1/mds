@@ -27,7 +27,7 @@ public class Comment {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@OneToOne
+	@ManyToOne
 	private Movie movie;
 	
 	@Column
@@ -39,7 +39,7 @@ public class Comment {
 	@ManyToOne
 	private SiteUser author;
 	
-	private LocalDateTime creatDate;
+	private LocalDateTime createDate;
 	
 	private LocalDateTime modifyDate;
 	

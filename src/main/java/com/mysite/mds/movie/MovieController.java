@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.RequiredArgsConstructor;
@@ -22,4 +23,10 @@ public class MovieController {
 		return "movie_list";
 	}
 	
+	@RequestMapping("/detail/{id}")
+	public String detail(Model model, @PathVariable("id") Integer id) {
+		Movie movie = this.movieService.getMovie(id);
+		model.addAttribute("movie", movie);
+		return "movie_detail";
+	}
 }

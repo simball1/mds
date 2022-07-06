@@ -2,6 +2,7 @@ package com.mysite.mds.movie;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +27,7 @@ public class Movie {
 	@Column(length = 100)
 	private String title;
 	
-	@OneToMany
+	@OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
 	private List<Comment> commentList;
 
 }
