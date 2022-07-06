@@ -1,14 +1,19 @@
-<table>
-    <thead>
-        <tr>
-            <th>영화 제목</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr th:each="movie : ${movieList}">
-            <td>
-            	<a th:href="@{|movie/detail/{movie.id}|}" th:text="${movie.title}"></a>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+<div class="container my-3">
+	<table class="table">
+		<thead class="table-dark">
+			<tr>
+				<th>번호</th>
+				<th>영화 제목</th>
+			</tr>		
+		</thead>
+		<tbody>
+			<tr th:each="movie, loop : ${movieList}">
+				<td th:text="${loop.count}"></td>
+				<td>
+					<a th:href="@{|/movie/detail/${movie.id}|}" th:text="${movie.title}"></a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

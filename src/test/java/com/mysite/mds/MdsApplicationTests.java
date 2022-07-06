@@ -34,7 +34,7 @@ class MdsApplicationTests {
 		comment.setMovie(movie);
 		comment.setStars(5);
 		comment.setContent("명작입니다.");
-		comment.setCreatDate(LocalDateTime.now());
+		comment.setCreateDate(LocalDateTime.now());
 		this.commentRepository.save(comment);
 		
 	}
