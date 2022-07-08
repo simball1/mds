@@ -27,6 +27,9 @@ public class Movie {
 	@Column(length = 100)
 	private String title;
 	
+	@Column
+	private Double avgStarScore;
+	
 	@OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
 	private List<Comment> commentList;
 

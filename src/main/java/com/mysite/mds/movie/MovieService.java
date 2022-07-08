@@ -29,4 +29,17 @@ public class MovieService {
 			throw new DataNotFoundException("movie not found");
 		}
 	}
+	
+	public void updateAvgStarScore(Integer id, Double avgStarScore) {
+		Optional<Movie> om = this.movieRepository.findById(id);
+		if(om.isPresent()) {
+			Movie movie = om.get();
+			movie.setAvgStarScore(avgStarScore);
+			this.movieRepository.save(movie);
+		} 
+		else {
+			throw new DataNotFoundException("movie not found");
+		}
+		
+	}
 }
