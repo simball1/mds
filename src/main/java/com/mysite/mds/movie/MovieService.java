@@ -13,33 +13,42 @@ import lombok.RequiredArgsConstructor;
 @Service
 public class MovieService {
 
-	private final MovieRepository movieRepository; 
-	
+	private final MovieRepository movieRepository;
+
 	public List<Movie> getList() {
 		return this.movieRepository.findAll();
 	}
 
-	
 	public Movie getMovie(Integer id) {
 		Optional<Movie> om = this.movieRepository.findById(id);
-		if(om.isPresent()) {
+		if (om.isPresent()) {
 			return om.get();
-		}
-		else {
+		} else {
 			throw new DataNotFoundException("movie not found");
 		}
 	}
-	
+
+	public Movie getMovie(String title) {
+		Movie movie = this.movieRepository.findByTitle(title);
+
+		if (movie != null) {
+			return movie;
+		} else {
+			throw new DataNotFoundException("movie not found");
+
+		}
+	}
+
 	public void updateAvgStarScore(Integer id, Double avgStarScore) {
 		Optional<Movie> om = this.movieRepository.findById(id);
-		if(om.isPresent()) {
+		if (om.isPresent()) {
 			Movie movie = om.get();
 			movie.setAvgStarScore(avgStarScore);
 			this.movieRepository.save(movie);
-		} 
-		else {
+		} else {
 			throw new DataNotFoundException("movie not found");
 		}
-		
+
 	}
+
 }

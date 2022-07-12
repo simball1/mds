@@ -8,9 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.mysite.mds.comment.Comment;
+import com.mysite.mds.director.Director;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -28,9 +30,15 @@ public class Movie {
 	private String title;
 	
 	@Column
+	private String releaseYear;
+	
+	@Column
 	private Double avgStarScore;
 	
 	@OneToMany(mappedBy = "movie", cascade = CascadeType.REMOVE)
 	private List<Comment> commentList;
+	
+	@ManyToOne
+	private Director director;
 
 }
