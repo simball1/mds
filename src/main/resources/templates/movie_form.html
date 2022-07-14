@@ -1,0 +1,27 @@
+<html layout:decorate="~{layout}">
+<div layout:fragment="content" class="container">
+    <h5 class="my-3 border-bottom pb-2">영화 등록</h5>
+    <form th:action="@{/movie/create}" th:object="${movieForm}" method="post">
+    	<div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+            <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+        </div>
+        <div class="mb-3">
+            <label for="title" class="form-label">영화 제목</label>
+            <input type="text" th:field="*{title}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="directorName" class="form-label">감독 이름</label>
+            <input type="text" th:field="*{directorName}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="actorName" class="form-label">배우 이름</label>
+            <input type="text" th:field="*{actorName}" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">시놉시스</label>
+            <textarea type="text" th:field="*{content}" class="form-control"></textarea>
+        </div>
+        <input type="submit" value="저장하기" class="btn btn-primary my-2">
+    </form>
+</div>
+</html>

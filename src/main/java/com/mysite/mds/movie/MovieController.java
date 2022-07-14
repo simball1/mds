@@ -2,10 +2,14 @@ package com.mysite.mds.movie;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import lombok.RequiredArgsConstructor;
@@ -32,7 +36,17 @@ public class MovieController {
 	}
 	
 	@GetMapping("/create")
-	public String create() {
+	public String create(MovieForm movieForm) {
 		return "movie_form";
+	}
+	
+	@PostMapping("/create")
+	public String create(@Valid MovieForm movieForm, BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			return "movie_form";
+		}
+		this.movieService.createMovie(movieForm.getTitle(), movieForm.getDirectorName(), 
+				movieForm.getActorName(), movieForm.getContent());
+		return "redirect:/movie/list";
 	}
 }
