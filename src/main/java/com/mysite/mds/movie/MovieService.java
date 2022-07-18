@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.mysite.mds.DataNotFoundException;
@@ -24,7 +27,7 @@ public class MovieService {
 	private final DirectorRepository directorRepository;
 
 	private final ActorRepository actorRepository;
-	
+
 	public List<Movie> getList() {
 		return this.movieRepository.findAll();
 	}
@@ -65,7 +68,7 @@ public class MovieService {
 		Movie movie = new Movie();
 		movie.setTitle(title);
 		movie.setContent(content);
-		
+
 		Optional<Director> od = this.directorRepository.findByName(directorName);
 		if (od.isPresent()) { // 이미 해당 감독이 등록되어 있을 경우
 			movie.setDirector(od.get());
@@ -75,10 +78,10 @@ public class MovieService {
 			this.directorRepository.save(newDirector);
 			movie.setDirector(newDirector);
 		}
-		
+
 		Optional<Actor> oa = this.actorRepository.findByName(actorName);
 		Set<Actor> actorSet = new HashSet<>();
-		if(oa.isPresent()) {
+		if (oa.isPresent()) {
 			actorSet.add(oa.get());
 
 		} else {
@@ -89,6 +92,11 @@ public class MovieService {
 		}
 		movie.setActorList(actorSet);
 		this.movieRepository.save(movie);
+	}
+
+	public Page<Movie> getMovieList(int page) {
+		Pageable pageable = PageRequest.of(page, 10);
+		return this.movieRepository.findAll(pageable);
 	}
 
 }
