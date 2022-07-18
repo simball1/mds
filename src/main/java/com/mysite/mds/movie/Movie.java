@@ -36,7 +36,7 @@ public class Movie {
 	private Director director;
 	
 	@ManyToMany
-	Set<Actor> actor;
+	Set<Actor> actorList;
 	
 	@Column(columnDefinition = "TEXT")
 	private String content;

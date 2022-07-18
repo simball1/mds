@@ -87,8 +87,7 @@ public class MovieService {
 			this.actorRepository.save(newActor);
 			actorSet.add(newActor);
 		}
-		movie.setActor(actorSet);
-		
+		movie.setActorList(actorSet);
 		this.movieRepository.save(movie);
 	}
 
