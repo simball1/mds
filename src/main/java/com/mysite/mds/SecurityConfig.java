@@ -17,6 +17,10 @@ public class SecurityConfig {
 		http.authorizeRequests().antMatchers("/**").permitAll()
 			.and()
 				.csrf().ignoringAntMatchers("/h2-console2/**")
+			.and()
+				.formLogin()
+				.loginPage("/user/login")
+				.defaultSuccessUrl("/")
 				
 		;
 		

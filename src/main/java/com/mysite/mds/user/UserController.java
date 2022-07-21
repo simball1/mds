@@ -35,7 +35,6 @@ public class UserController {
 			return "signup_form";
 		}
 		
-		
 		try {
 			
 			userService.create(userCreateForm.getUsername(), 
@@ -52,5 +51,10 @@ public class UserController {
 		}
 		
 		return "redirect:/";
+	}
+	
+	@GetMapping("/login")
+	public String login() {
+		return "login_form";
 	}
 }
