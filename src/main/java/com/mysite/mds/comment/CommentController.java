@@ -2,12 +2,14 @@ package com.mysite.mds.comment;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.mysite.mds.movie.Movie;
 import com.mysite.mds.movie.MovieService;
@@ -24,12 +26,16 @@ public class CommentController {
 	private final CommentService commentService;
 	
 	@PostMapping("/create/{id}")
-	public String create(Model model, @PathVariable("id") Integer id, @RequestParam String stars,
-			@RequestParam String content) {
-		Movie movie = this.movieService.getMovie(id);
-		int starScore = Integer.parseInt(stars);
-		this.commentService.create(movie, starScore, content);
+	public String create(Model model, @PathVariable("id") Integer id, @Valid CommentForm commentForm, BindingResult bindingResult) {
 		
+		Movie movie = this.movieService.getMovie(id);
+		
+		if(bindingResult.hasErrors()) {
+			model.addAttribute("movie", movie);
+			return "movie_detail";
+		}
+		Integer stars = Integer.parseInt(commentForm.getStars());
+		this.commentService.create(movie, stars, commentForm.getContent());
 		this.movieService.updateAvgStarScore(id, getAvgStarScore(id));
 		return String.format("redirect:/movie/detail/%s", id);
 	}

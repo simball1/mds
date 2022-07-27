@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.mysite.mds.comment.CommentForm;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class MovieController {
 	}
 	
 	@RequestMapping("/detail/{id}")
-	public String detail(Model model, @PathVariable("id") Integer id) {
+	public String detail(Model model, @PathVariable("id") Integer id, CommentForm commentForm) {
 		Movie movie = this.movieService.getMovie(id);
 		model.addAttribute("movie", movie);
 		return "movie_detail";
