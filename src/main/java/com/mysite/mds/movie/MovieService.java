@@ -98,5 +98,9 @@ public class MovieService {
 		Pageable pageable = PageRequest.of(page, 10);
 		return this.movieRepository.findAll(pageable);
 	}
+	
+	public void delete(Movie movie) {
+		this.movieRepository.delete(movie);
+	}
 
 }

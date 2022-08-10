@@ -1,8 +1,12 @@
 package com.mysite.mds.movie;
 
+import java.security.Principal;
+
 import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -11,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.mysite.mds.comment.CommentForm;
 
@@ -50,6 +55,17 @@ public class MovieController {
 		this.movieService.createMovie(movieForm.getTitle(), movieForm.getDirectorName(), 
 				movieForm.getActorName(), movieForm.getContent());
 		return "redirect:/movie/list";
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/delete/{id}")
+	public String delete(@PathVariable("id") Integer id, Principal principal) {
+		Movie movie = this.movieService.getMovie(id);
+		if(!principal.getName().equals("simball1")) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
+		}
+		this.movieService.delete(movie);
+		return "redirect:/";
 	}
 	
 }
