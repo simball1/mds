@@ -42,4 +42,8 @@ public class CommentService {
 		comment.setStars(starScore);
 		this.commentRepository.save(comment);
 	}
+	
+	public void delete(Comment comment) {
+		this.commentRepository.delete(comment);
+	}
 }

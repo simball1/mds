@@ -55,7 +55,7 @@ public class CommentController {
 	public String modify(CommentForm commentForm, @PathVariable("id") Integer id, Principal principal) {
 		Comment comment = this.commentService.getComment(id);
 		if(!comment.getAuthor().getUsername().equals(principal.getName())) {
-			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
 		}
 		commentForm.setContent(comment.getContent());
 		commentForm.setStars(comment.getStars().toString());
@@ -76,11 +76,25 @@ public class CommentController {
 		this.commentService.modify(comment, 
 				commentForm.getContent(), Integer.parseInt(commentForm.getStars()));
 		
-		int moiveId = comment.getMovie().getId();
-		this.movieService.updateAvgStarScore(moiveId, getAvgStarScore(moiveId));
+		int movieId = comment.getMovie().getId();
+		this.movieService.updateAvgStarScore(movieId, getAvgStarScore(movieId));
 		
-		return String.format("redirect:/movie/detail/%s", moiveId);
+		return String.format("redirect:/movie/detail/%s", movieId);	
+	}
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("delete/{id}")
+	public String delete(@PathVariable("id") Integer id, Principal principal) {
+		Comment comment = this.commentService.getComment(id);
+		if(!comment.getAuthor().getUsername().equals(principal.getName())) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제 권한이 없습니다.");
+		}
+		this.commentService.delete(comment);
 		
+		int movieId = comment.getMovie().getId();
+		this.movieService.updateAvgStarScore(movieId, getAvgStarScore(movieId));
+		
+		return String.format("redirect:/movie/detail/%s", movieId);
 	}
 	
 	
