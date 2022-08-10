@@ -12,6 +12,10 @@
 				<td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
 				<td>
 					<a th:href="@{|/movie/detail/${movie.id}|}" th:text="${movie.title}"></a>
+					<span class="text-danger small ms-2"
+                        th:if="${#lists.size(movie.commentList) > 0}" 
+                        th:text="${#lists.size(movie.commentList)}">
+                    </span>
 				</td>
 			</tr>
 		</tbody>
