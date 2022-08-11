@@ -10,7 +10,10 @@
 			<div class="card-text" style="white-space: pre-line;" th:each="actor : ${movie.actorList}" th:text="|배우: ${actor.name}|"></div>
 		</div>
 		<a th:href="@{|/movie/modify/${movie.id}|}" class="btn btn-primary">영화 정보 수정하기</a>
-		<a th:href="@{|/movie/delete/${movie.id}|}" class="btn btn-primary">영화 삭제</a>
+		<a href="javascript:void(0);" th:data-uri="@{|/movie/delete/${movie.id}|}"
+			class="delete btn btn-primary"
+			sec:authorize="isAuthenticated()"
+			th:text="영화삭제"></a>
 	</div>
 	<!-- 코멘트 갯수 표시 -->
 	<h5 class="border-bottom my-3 py-2"

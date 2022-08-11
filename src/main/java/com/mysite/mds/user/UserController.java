@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.mysite.mds.domain.UserVO;
+
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -26,8 +28,9 @@ public class UserController {
 	@PostMapping("/signup")
 	public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
 		
-		if(bindingResult.hasErrors())
-			return "signup_form";
+		if(bindingResult.hasErrors()) {
+			return "signup_form";			
+		}
 		
 		if(!userCreateForm.getPassword().equals(userCreateForm.getPassword2())) {
 			bindingResult.rejectValue("password2", "passwordInCorrect", 
@@ -36,9 +39,8 @@ public class UserController {
 		}
 		
 		try {
+			userService.create(userCreateForm);
 			
-			userService.create(userCreateForm.getUsername(), 
-					userCreateForm.getEmail(), userCreateForm.getPassword());
 		} catch(DataIntegrityViolationException e) {
 			e.printStackTrace();
 			bindingResult.reject("signupFailed", "이미 등록된 사용자입니다.");
@@ -49,7 +51,6 @@ public class UserController {
 			bindingResult.reject("signupFailed", e.getMessage());
 			return "signup_form";
 		}
-		
 		return "redirect:/";
 	}
 	

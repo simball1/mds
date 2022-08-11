@@ -43,7 +43,7 @@
         </ul>
     </div>
     <!-- 페이징처리 끝 -->
-	<a th:href="@{/movie/create}" class="btn btn-primary">영화 등록하기</a>
+	<a th:href="@{/movie/create}" class="btn btn-primary" sec:authorize="hasRole('ROLE_ADMIN')">영화 등록하기</a>
 	<a th:href="@{/director/create}" class="btn btn-primary">감독 등록하기</a>
 </div>
 </html>

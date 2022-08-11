@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,6 +29,23 @@ public class MovieController {
 
 	private final MovieService movieService;
 	
+	@Secured("ROLE_ADMIN")
+	@GetMapping("/create")
+	public String create(MovieForm movieForm) {
+		return "movie_form";
+	}
+	
+	@Secured("ROLE_ADMIN")
+	@PostMapping("/create")
+	public String create(@Valid MovieForm movieForm, BindingResult bindingResult) {
+		if(bindingResult.hasErrors()) {
+			return "movie_form";
+		}
+		this.movieService.createMovie(movieForm);
+		return "redirect:/movie/list";
+	}
+	
+	
 	@RequestMapping("/list")
 	public String list(Model model, @RequestParam(value="page", defaultValue="0") int page) {
 		Page<Movie> paging = this.movieService.getMovieList(page);
@@ -42,20 +60,36 @@ public class MovieController {
 		return "movie_detail";
 	}
 	
-	@GetMapping("/create")
-	public String create(MovieForm movieForm) {
+	
+	
+	
+	
+	@PreAuthorize("isAuthenticated()")
+	@GetMapping("/modify/{id}")
+	public String modify(MovieForm movieForm, @PathVariable("id") Integer id, Principal principal) {
+		Movie movie = this.movieService.getMovie(id);
+		if(!principal.getName().equals("simball1")) {
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정 권한이 없습니다.");
+		}
+		movieForm.setTitle(movie.getTitle());
+		movieForm.setDirectorName(movie.getDirector().getName());
+		movieForm.setContent(movie.getContent());
+		
 		return "movie_form";
 	}
 	
-	@PostMapping("/create")
-	public String create(@Valid MovieForm movieForm, BindingResult bindingResult) {
+	@PreAuthorize("isAuthenticated()")
+	@PostMapping("/modify/{id}")
+	public String modify(@Valid MovieForm movieForm, BindingResult bindingResult , 
+			@PathVariable("id") Integer id, Principal principal) {
 		if(bindingResult.hasErrors()) {
 			return "movie_form";
 		}
-		this.movieService.createMovie(movieForm.getTitle(), movieForm.getDirectorName(), 
-				movieForm.getActorName(), movieForm.getContent());
-		return "redirect:/movie/list";
+		Movie movie = this.movieService.getMovie(id);
+		
+		return "";
 	}
+	
 	
 	@PreAuthorize("isAuthenticated()")
 	@GetMapping("/delete/{id}")

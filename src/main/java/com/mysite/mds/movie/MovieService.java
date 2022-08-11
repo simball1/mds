@@ -23,13 +23,58 @@ import lombok.RequiredArgsConstructor;
 public class MovieService {
 
 	private final MovieRepository movieRepository;
-
 	private final DirectorRepository directorRepository;
-
 	private final ActorRepository actorRepository;
 
+	public Movie createMovie(MovieForm movieForm) {
+		
+		Movie movie = new Movie();
+		movie.setTitle(movieForm.getTitle());
+		movie.setContent(movieForm.getContent());
+
+		Optional<Director> od = this.directorRepository.findByName(movieForm.getDirectorName());
+		
+		if (od.isPresent()) { 
+			movie.setDirector(od.get());
+			
+		} else {
+			Director newDirector = new Director();
+			newDirector.setName(movieForm.getDirectorName());
+			this.directorRepository.save(newDirector);
+			movie.setDirector(newDirector);
+		}
+
+		Optional<Actor> oa = this.actorRepository.findByName(movieForm.getActorName());
+		
+		Set<Actor> actorSet = new HashSet<>();
+		if (oa.isPresent()) {
+			actorSet.add(oa.get());
+
+		} else {
+			Actor newActor = new Actor();
+			newActor.setName(movieForm.getActorName());
+			this.actorRepository.save(newActor);
+			actorSet.add(newActor);
+		}
+		
+		movie.setActorList(actorSet);
+		this.movieRepository.save(movie);
+		
+		return movie;
+	}
+	
+	
+	
+	
+	
+	
 	public List<Movie> getList() {
 		return this.movieRepository.findAll();
+	}
+	
+	public Page<Movie> getMovieList(int page) {
+		Pageable pageable = PageRequest.of(page, 10);
+		return this.movieRepository.findAll(pageable);
 	}
 
 	public Movie getMovie(Integer id) {
@@ -64,39 +109,12 @@ public class MovieService {
 
 	}
 
-	public void createMovie(String title, String directorName, String actorName, String content) {
-		Movie movie = new Movie();
-		movie.setTitle(title);
-		movie.setContent(content);
+	
 
-		Optional<Director> od = this.directorRepository.findByName(directorName);
-		if (od.isPresent()) { // 이미 해당 감독이 등록되어 있을 경우
-			movie.setDirector(od.get());
-		} else { // 새로 등록되는 감독일 경우
-			Director newDirector = new Director();
-			newDirector.setName(directorName);
-			this.directorRepository.save(newDirector);
-			movie.setDirector(newDirector);
-		}
-
-		Optional<Actor> oa = this.actorRepository.findByName(actorName);
-		Set<Actor> actorSet = new HashSet<>();
-		if (oa.isPresent()) {
-			actorSet.add(oa.get());
-
-		} else {
-			Actor newActor = new Actor();
-			newActor.setName(actorName);
-			this.actorRepository.save(newActor);
-			actorSet.add(newActor);
-		}
-		movie.setActorList(actorSet);
-		this.movieRepository.save(movie);
-	}
-
-	public Page<Movie> getMovieList(int page) {
-		Pageable pageable = PageRequest.of(page, 10);
-		return this.movieRepository.findAll(pageable);
+	
+	
+	public void modify(Movie movie, String title, String directorName, String actorName, String content) {
+		
 	}
 	
 	public void delete(Movie movie) {

@@ -17,21 +17,24 @@ public class UserService {
 	private final PasswordEncoder passwordEncoder;
 	
 	public SiteUser getUser(String username) {
-		Optional<SiteUser> siteUser =this.userRepository.findByusername(username);
+	
+		Optional<SiteUser> siteUser = this.userRepository.findByusername(username);
 		if(siteUser.isPresent()) {
 			return siteUser.get();
-		}
-		else {
+		} else {
 			throw new DataNotFoundException("siteuser not found");
 		}
 	}
 	
-	public SiteUser create(String username, String email, String password) {
+	public SiteUser create(UserCreateForm userCreateForm) {
+
 		SiteUser user = new SiteUser();
-		user.setUsername(username);
-		user.setEmail(email);
-		user.setPassword(passwordEncoder.encode(password));
+		user.setUsername(userCreateForm.getUsername());
+		user.setPassword(passwordEncoder.encode(userCreateForm.getPassword()));
+		user.setEmail(userCreateForm.getEmail());
+		user.setUserRole(UserRole.USER);
 		this.userRepository.save(user);
 		return user;
+		
 	}
 }

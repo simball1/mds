@@ -2,8 +2,6 @@ package com.mysite.mds.movie;
 
 import javax.validation.constraints.NotEmpty;
 
-import com.mysite.mds.director.Director;
-
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,5 +18,5 @@ public class MovieForm {
 	private String actorName;
 	
 	private String content;
-	
+
 }
