@@ -75,7 +75,7 @@ public class MovieController {
 		movieForm.setDirectorName(movie.getDirector().getName());
 		movieForm.setContent(movie.getContent());
 		
-		return "movie_form";
+		return "movie_form";	
 	}
 	
 	@PreAuthorize("isAuthenticated()")
